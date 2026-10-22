@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" width="760" height="300" role="img" aria-label="Scavenge 算法三步：From 区写满后标记存活对象，复制到 To 区并紧凑排列，然后清空 From 区并互换算区与空闲区">
+  <defs>
+    <marker id="m4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4d4d4d"/>
+    </marker>
+  </defs>
+  <rect width="760" height="300" fill="#ffffff"/>
+  <g font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#333333">
+
+    <!-- ① 触发回收 -->
+    <text x="109" y="32" text-anchor="middle" font-size="12.5" font-weight="bold">① 使用区写满，触发回收</text>
+    <text x="109" y="62" text-anchor="middle" font-size="11" fill="#4a6785">From 使用区</text>
+    <rect x="24" y="70" width="170" height="48" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+    <rect x="30" y="78" width="36" height="32" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="72" y="78" width="36" height="32" fill="#f8cecc" stroke="#b85450"/>
+    <rect x="114" y="78" width="36" height="32" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="156" y="78" width="32" height="32" fill="#f8cecc" stroke="#b85450"/>
+    <text x="109" y="148" text-anchor="middle" font-size="11" fill="#4a6785">To 空闲区</text>
+    <rect x="24" y="156" width="170" height="48" rx="5" fill="#ffffff" stroke="#6c8ebf" stroke-dasharray="6 4"/>
+    <text x="109" y="186" text-anchor="middle" font-size="11" fill="#9aa4b2">空闲</text>
+
+    <path d="M198 94 H282" fill="none" stroke="#4d4d4d" marker-end="url(#m4)"/>
+    <path d="M198 180 H282" fill="none" stroke="#4d4d4d" marker-end="url(#m4)"/>
+
+    <!-- ② 复制存活对象 -->
+    <text x="375" y="32" text-anchor="middle" font-size="12.5" font-weight="bold">② 存活对象复制到 To 区</text>
+    <text x="375" y="62" text-anchor="middle" font-size="11" fill="#4a6785">From 使用区（待清空）</text>
+    <rect x="290" y="70" width="170" height="48" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+    <rect x="296" y="78" width="36" height="32" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="338" y="78" width="36" height="32" fill="#f8cecc" stroke="#b85450"/>
+    <rect x="380" y="78" width="36" height="32" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="422" y="78" width="32" height="32" fill="#f8cecc" stroke="#b85450"/>
+    <text x="375" y="148" text-anchor="middle" font-size="11" fill="#4a6785">To 空闲区（紧凑排列）</text>
+    <rect x="290" y="156" width="170" height="48" rx="5" fill="#ffffff" stroke="#6c8ebf"/>
+    <rect x="296" y="164" width="56" height="32" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="358" y="164" width="56" height="32" fill="#d5e8d4" stroke="#82b366"/>
+
+    <path d="M464 94 H548" fill="none" stroke="#4d4d4d" marker-end="url(#m4)"/>
+    <path d="M464 180 H548" fill="none" stroke="#4d4d4d" marker-end="url(#m4)"/>
+
+    <!-- ③ 清空 + 角色互换 -->
+    <text x="641" y="32" text-anchor="middle" font-size="12.5" font-weight="bold">③ 清空 From，两区角色互换</text>
+    <text x="641" y="62" text-anchor="middle" font-size="11" fill="#4a6785">From → 空闲区</text>
+    <rect x="556" y="70" width="170" height="48" rx="5" fill="#ffffff" stroke="#6c8ebf" stroke-dasharray="6 4"/>
+    <text x="641" y="100" text-anchor="middle" font-size="11" fill="#9aa4b2">已整块清空</text>
+    <text x="641" y="148" text-anchor="middle" font-size="11" fill="#4a6785">To → 使用区</text>
+    <rect x="556" y="156" width="170" height="48" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+    <rect x="562" y="164" width="56" height="32" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="624" y="164" width="56" height="32" fill="#d5e8d4" stroke="#82b366"/>
+
+    <!-- 说明 -->
+    <text x="24" y="240" font-size="12" fill="#667085">复制按发现顺序紧密排列 → To 区天然连续，所以 Scavenge 不会产生内存碎片</text>
+    <rect x="24" y="258" width="14" height="14" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="46" y="270" font-size="11.5" fill="#667085">存活对象</text>
+    <rect x="130" y="258" width="14" height="14" fill="#f8cecc" stroke="#b85450"/>
+    <text x="152" y="270" font-size="11.5" fill="#667085">垃圾对象（原地丢弃，不做搬运）</text>
+  </g>
+</svg>

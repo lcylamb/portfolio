@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 340" width="780" height="340" role="img" aria-label="对比图：Vue2 初始化时全量递归劫持整棵对象树；Vue3 的 Proxy 懒代理，只有被访问到的分支才逐层建代理">
+  <defs>
+    <marker id="m2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4d4d4d"/>
+    </marker>
+  </defs>
+  <rect width="780" height="340" fill="#ffffff"/>
+  <g font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#333333">
+
+    <!-- ===== 左：Vue2 全量递归 ===== -->
+    <text x="190" y="28" text-anchor="middle" font-size="12.5" font-weight="bold">Vue2：初始化时全量递归</text>
+    <text x="190" y="48" text-anchor="middle" font-size="11" fill="#4a6785">用不用都劫持，大对象先付一笔「遍历税」</text>
+
+    <rect x="150" y="66" width="80" height="32" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="190" y="86" text-anchor="middle">root</text>
+
+    <path d="M170 98 L110 132" fill="none" stroke="#4d4d4d" marker-end="url(#m2)"/>
+    <path d="M190 98 L190 132" fill="none" stroke="#4d4d4d" marker-end="url(#m2)"/>
+    <path d="M210 98 L268 132" fill="none" stroke="#4d4d4d" marker-end="url(#m2)"/>
+
+    <rect x="70" y="136" width="80" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="110" y="155" text-anchor="middle">a</text>
+    <rect x="152" y="136" width="76" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="190" y="155" text-anchor="middle">b</text>
+    <rect x="254" y="136" width="80" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="294" y="155" text-anchor="middle">c</text>
+
+    <path d="M190 166 L190 196" fill="none" stroke="#4d4d4d" marker-end="url(#m2)"/>
+    <rect x="152" y="200" width="76" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="190" y="219" text-anchor="middle">b.x</text>
+
+    <text x="190" y="266" text-anchor="middle" font-size="11.5" fill="#667085">每个属性都要递归注册 getter / setter</text>
+    <text x="190" y="286" text-anchor="middle" font-size="11.5" fill="#667085">页面只渲染 3 个字段，也逃不掉</text>
+
+    <!-- 中间分隔 -->
+    <path d="M390 60 V290" stroke="#d0d0d0" stroke-dasharray="6 5"/>
+
+    <!-- ===== 右：Vue3 懒代理 ===== -->
+    <text x="590" y="28" text-anchor="middle" font-size="12.5" font-weight="bold">Vue3：Proxy 懒代理</text>
+    <text x="590" y="48" text-anchor="middle" font-size="11" fill="#4a6785">访问到哪层，才代理哪层（Lazy Reactive）</text>
+
+    <rect x="550" y="66" width="80" height="32" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="590" y="86" text-anchor="middle">root</text>
+
+    <path d="M570 98 L510 132" fill="none" stroke="#999999"/>
+    <path d="M590 98 L590 132" fill="none" stroke="#4d4d4d" marker-end="url(#m2)"/>
+    <path d="M610 98 L668 132" fill="none" stroke="#999999"/>
+
+    <rect x="470" y="136" width="80" height="30" rx="5" fill="#f5f5f5" stroke="#999999" stroke-dasharray="6 4"/>
+    <text x="510" y="155" text-anchor="middle" fill="#888888">a</text>
+    <rect x="552" y="136" width="76" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="590" y="155" text-anchor="middle">b</text>
+    <rect x="654" y="136" width="80" height="30" rx="5" fill="#f5f5f5" stroke="#999999" stroke-dasharray="6 4"/>
+    <text x="694" y="155" text-anchor="middle" fill="#888888">c</text>
+
+    <path d="M590 166 L590 196" fill="none" stroke="#4d4d4d" marker-end="url(#m2)"/>
+    <rect x="552" y="200" width="76" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="590" y="219" text-anchor="middle">b.x</text>
+
+    <text x="590" y="266" text-anchor="middle" font-size="11.5" fill="#667085">绿色：读取路径上的对象，逐层建代理</text>
+    <text x="590" y="286" text-anchor="middle" font-size="11.5" fill="#667085">灰色虚线：没被访问到，保持原始对象，零开销</text>
+
+    <!-- 底部说明 -->
+    <rect x="24" y="304" width="14" height="14" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="46" y="316" font-size="11.5" fill="#667085">已代理（读写被拦截，能触发响应）</text>
+    <rect x="290" y="304" width="14" height="14" fill="#f5f5f5" stroke="#999999"/>
+    <text x="312" y="316" font-size="11.5" fill="#667085">未代理（原始对象）——新增、删除、索引等操作由 trap 原生覆盖</text>
+  </g>
+</svg>

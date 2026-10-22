@@ -1,0 +1,40 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Schema 驱动的动态表单引擎 —— 字段与列由后端按业务状态动态下发，前端不预设表单结构",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && node scripts/set-en-lang.mjs",
+    "preview": "node scripts/serve.mjs",
+    "test:unit": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "format": "prettier --cache --write ."
+  },
+  "dependencies": {
+    "highlight.js": "^11.12.0",
+    "markdown-it": "^15.0.2",
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.15.0",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/markdown-it": "^14.2.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "eslint": "^9.15.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "globals": "^15.12.0",
+    "postcss": "^8.4.49",
+    "prettier": "^3.3.3",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.15.0",
+    "vitest": "^2.1.8"
+  }
+}

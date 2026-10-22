@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- 站点图标：墨底纸色雨滴，斜落 + 虚线轨迹（Pluvia's Trail）。
+       黑白单色：16px 缩到标签页里仍然是一滴清楚的雨。 -->
+  <rect width="64" height="64" rx="14" fill="#1c1a17"/>
+  <!-- 落点轨迹：两颗小圆点从右上斜进场，和雨滴尖保持距离 -->
+  <path d="M48.5 8.5 L43 17" stroke="#faf9f6" stroke-opacity="0.5"
+        stroke-width="2.6" stroke-linecap="round" stroke-dasharray="0.1 5.2"/>
+  <!-- 雨滴：尖端朝上，整体微倾，落点是 trail 的延伸 -->
+  <g transform="rotate(14 32 37)">
+    <path d="M32 19 C36.5 27 43.5 32.5 43.5 40 A11.5 11.5 0 1 1 20.5 40 C20.5 32.5 27.5 27 32 19 Z"
+          fill="#faf9f6"/>
+  </g>
+</svg>

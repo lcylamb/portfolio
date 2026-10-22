@@ -1,0 +1,8 @@
+dist
+out
+.next
+node_modules
+coverage
+*.md
+next-env.d.ts
+package-lock.json

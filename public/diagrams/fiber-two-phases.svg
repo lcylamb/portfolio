@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 320" width="780" height="320" role="img" aria-label="Fiber 两阶段与双缓存：render 阶段在 workInProgress 树上可中断地构建并打副作用标记；commit 阶段不可中断地把副作用一次性打到屏幕，随后两棵树交换角色">
+  <defs>
+    <marker id="m6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4d4d4d"/>
+    </marker>
+  </defs>
+  <rect width="780" height="320" fill="#ffffff"/>
+  <g font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#333333">
+
+    <text x="390" y="26" text-anchor="middle" font-size="12.5" font-weight="bold">render 可中断，commit 不可中断</text>
+
+    <!-- 左：current 树 -->
+    <text x="150" y="56" text-anchor="middle" font-size="11" fill="#6c8ebf">current 树（屏幕上正在显示）</text>
+    <rect x="115" y="66" width="70" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+    <text x="150" y="85" text-anchor="middle">A</text>
+    <path d="M135 96 L105 120" fill="none" stroke="#6c8ebf"/>
+    <path d="M165 96 L195 120" fill="none" stroke="#6c8ebf"/>
+    <rect x="60" y="124" width="70" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+    <text x="95" y="143" text-anchor="middle">B</text>
+    <rect x="170" y="124" width="70" height="30" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+    <text x="205" y="143" text-anchor="middle">C</text>
+
+    <!-- 中：render 阶段 -->
+    <rect x="300" y="60" width="180" height="104" rx="8" fill="#f5f5f5" stroke="#999999" stroke-dasharray="7 5"/>
+    <text x="390" y="82" text-anchor="middle" font-size="11.5" font-weight="bold">render 阶段（可中断）</text>
+    <text x="390" y="102" text-anchor="middle" font-size="10.5">diff 新旧 Fiber 树</text>
+    <text x="390" y="120" text-anchor="middle" font-size="10.5">给要变更的节点打 effectTag</text>
+    <text x="390" y="138" text-anchor="middle" font-size="10.5">纯内存计算，不碰 DOM</text>
+    <text x="390" y="156" text-anchor="middle" font-size="10.5" fill="#b85450">随时可停、可扔掉重算</text>
+
+    <!-- 右：workInProgress 树 -->
+    <text x="630" y="56" text-anchor="middle" font-size="11" fill="#82b366">workInProgress 树（内存中构建）</text>
+    <rect x="595" y="66" width="70" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="630" y="85" text-anchor="middle">A'</text>
+    <path d="M615 96 L585 120" fill="none" stroke="#82b366"/>
+    <path d="M645 96 L675 120" fill="none" stroke="#82b366"/>
+    <rect x="540" y="124" width="70" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="575" y="143" text-anchor="middle">B'</text>
+    <rect x="650" y="124" width="70" height="30" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="685" y="143" text-anchor="middle">C'</text>
+    <rect x="700" y="88" width="52" height="22" rx="4" fill="#fff2cc" stroke="#d6b656"/>
+    <text x="726" y="103" text-anchor="middle" font-size="9.5">effectTag</text>
+    <path d="M700 99 L692 106" fill="none" stroke="#d6b656"/>
+
+    <path d="M255 80 L296 80" fill="none" stroke="#4d4d4d" marker-end="url(#m6)"/>
+    <text x="275" y="72" text-anchor="middle" font-size="10" fill="#667085">对照</text>
+    <path d="M484 80 L536 80" fill="none" stroke="#4d4d4d" marker-end="url(#m6)"/>
+    <text x="510" y="72" text-anchor="middle" font-size="10" fill="#667085">构建</text>
+
+    <!-- commit -->
+    <path d="M390 168 L390 196" fill="none" stroke="#4d4d4d" marker-end="url(#m6)"/>
+    <rect x="240" y="200" width="300" height="52" rx="8" fill="#e1d5e7" stroke="#9673a6"/>
+    <text x="390" y="221" text-anchor="middle" font-size="11.5" font-weight="bold">commit 阶段（不可中断，一次做完）</text>
+    <text x="390" y="240" text-anchor="middle" font-size="10.5">按 effectTag 执行 DOM 增删改 → useLayoutEffect → 异步 useEffect</text>
+
+    <path d="M544 226 L630 160" fill="none" stroke="#4d4d4d" stroke-dasharray="6 4" marker-end="url(#m6)"/>
+    <text x="610" y="200" text-anchor="middle" font-size="10" fill="#667085">副作用上屏</text>
+
+    <!-- 交换 -->
+    <path d="M150 168 L150 286 L330 286" fill="none" stroke="#9673a6" stroke-dasharray="6 4" marker-end="url(#m6)"/>
+    <text x="240" y="278" text-anchor="middle" font-size="10.5" fill="#9673a6">commit 完成后两棵树交换角色：workInProgress 变成新的 current</text>
+    <text x="600" y="290" text-anchor="middle" font-size="10.5" fill="#667085">下一轮更新，又在旧 current 上重新构建 workInProgress</text>
+  </g>
+</svg>

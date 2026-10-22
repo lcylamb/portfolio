@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 340" width="760" height="340" role="img" aria-label="标记清除后内存出现碎片、大块内存申请失败；标记整理把活动对象移到一端后，空闲内存成为一整块连续空间">
+  <rect width="760" height="340" fill="#ffffff"/>
+  <g font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#333333">
+
+    <!-- ── 标记清除后：碎片 ── -->
+    <text x="40" y="32" font-size="13" font-weight="bold">标记清除后：内存不连续，出现碎片</text>
+
+    <rect x="40" y="48" width="85" height="56" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="125" y="48" width="85" height="56" fill="#ffffff" stroke="#b85450" stroke-dasharray="5 3"/>
+    <rect x="210" y="48" width="85" height="56" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="295" y="48" width="85" height="56" fill="#ffffff" stroke="#b85450" stroke-dasharray="5 3"/>
+    <rect x="380" y="48" width="85" height="56" fill="#ffffff" stroke="#b85450" stroke-dasharray="5 3"/>
+    <rect x="465" y="48" width="85" height="56" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="550" y="48" width="85" height="56" fill="#ffffff" stroke="#b85450" stroke-dasharray="5 3"/>
+    <rect x="635" y="48" width="85" height="56" fill="#d5e8d4" stroke="#82b366"/>
+
+    <text x="127" y="82" text-anchor="middle" font-size="10.5" fill="#b85450">空</text>
+    <text x="297" y="82" text-anchor="middle" font-size="10.5" fill="#b85450">空</text>
+    <text x="382" y="82" text-anchor="middle" font-size="10.5" fill="#b85450">空</text>
+    <text x="552" y="82" text-anchor="middle" font-size="10.5" fill="#b85450">空</text>
+    <text x="82" y="82" text-anchor="middle" font-size="10.5" fill="#3f6b32">活</text>
+    <text x="252" y="82" text-anchor="middle" font-size="10.5" fill="#3f6b32">活</text>
+    <text x="507" y="82" text-anchor="middle" font-size="10.5" fill="#3f6b32">活</text>
+    <text x="677" y="82" text-anchor="middle" font-size="10.5" fill="#3f6b32">活</text>
+
+    <path d="M336 118 V136" fill="none" stroke="#b85450" stroke-width="1.5"/>
+    <text x="40" y="152" font-size="12" fill="#b85450">申请 200KB：空闲总量足够，但没有单块够大 → 分配失败（碎片化）</text>
+
+    <!-- ── 标记整理后：连续 ── -->
+    <text x="40" y="196" font-size="13" font-weight="bold">标记整理后：活动对象移到一端，空闲区成为一整块</text>
+
+    <rect x="40" y="212" width="85" height="56" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="125" y="212" width="85" height="56" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="210" y="212" width="85" height="56" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="295" y="212" width="85" height="56" fill="#d5e8d4" stroke="#82b366"/>
+    <rect x="380" y="212" width="340" height="56" fill="#ffffff" stroke="#82b366" stroke-dasharray="6 4"/>
+
+    <text x="82" y="246" text-anchor="middle" font-size="10.5" fill="#3f6b32">活</text>
+    <text x="167" y="246" text-anchor="middle" font-size="10.5" fill="#3f6b32">活</text>
+    <text x="252" y="246" text-anchor="middle" font-size="10.5" fill="#3f6b32">活</text>
+    <text x="337" y="246" text-anchor="middle" font-size="10.5" fill="#3f6b32">活</text>
+    <text x="550" y="246" text-anchor="middle" font-size="11.5" fill="#3f6b32">连续空闲空间 340KB → 一次分配成功</text>
+
+    <!-- 图例 -->
+    <rect x="40" y="300" width="14" height="14" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="62" y="312" font-size="11.5" fill="#667085">活动对象</text>
+    <rect x="140" y="300" width="14" height="14" fill="#ffffff" stroke="#b85450" stroke-dasharray="4 3"/>
+    <text x="162" y="312" font-size="11.5" fill="#667085">碎片化的空闲块</text>
+    <rect x="290" y="300" width="14" height="14" fill="#ffffff" stroke="#82b366" stroke-dasharray="4 3"/>
+    <text x="312" y="312" font-size="11.5" fill="#667085">整理后的连续空闲空间</text>
+  </g>
+</svg>

@@ -1,0 +1,515 @@
+@import 'tailwindcss';
+
+/* Tailwind v4 默认从「CSS 文件所在目录往上找 git 根」来扫描类名。
+   这个仓库还没进 git，靠自动推断不稳，所以显式指到 src。
+   路径相对本文件：../ = src/ */
+@source '../**/*.{ts,tsx}';
+
+/* 引擎的样式单独成文件，跟着引擎走（不依赖这里的任何 token）。
+   抽成包时把那个文件一起发出去即可。 */
+@import '../engine/styles.css';
+
+/* ------------------------------------------------------------------ *
+ * 设计 token
+ *
+ * 这些原来是 Less 变量（@text / @accent ...），写成 @theme 之后
+ * 每个 token 会同时变成工具类：
+ *   --color-ink   →  text-ink / bg-ink / border-ink
+ *   --font-mono   →  font-mono
+ * 所以下面组件里不会再出现任何硬编码色值，配色只有这一处可改。
+ * ------------------------------------------------------------------ */
+@theme {
+  /* 暖纸色系。原来的 #fafafa / #eaeaea 是纯中性灰 —— 干净，但和世界上
+     每一个默认模板长一样。往暖里挪半档（纸色、亚麻灰），页面像纸，
+     不像 Figma 画布。 */
+
+  --color-page: #faf9f6;
+  --color-surface: #ffffff;
+  --color-line: #e8e5de;
+  --color-line-strong: #d3cfc5;
+
+  --color-ink: #1c1a17; /* 标题、正文主色 */
+  --color-body: #45403a; /* 段落正文，比主色浅一档 */
+  --color-dim: #6f6a61; /* 次级信息 */
+  --color-faint: #a09a8e; /* 三级信息、日期 */
+
+  /* 链接蓝。#0070f3 是 Vercel 的品牌蓝，一整站都用它，
+     配色就自动带上了那套模板的气味；换成 GitHub 文档页的蓝，
+     饱和度和明度都低一档，是「看文档」的蓝，不是「产品落地页」的蓝。 */
+  --color-accent: #0969da;
+  --color-accent-soft: #ecf3fd;
+  --color-danger: #d92d20;
+  --color-danger-soft: #fef3f2;
+  --color-ok: #067647;
+  --color-ok-soft: #ecfdf3;
+  --color-warn: #b54708;
+  --color-warn-soft: #fffaeb;
+
+  /* 代码块底色：暖炭黑，不是 #0d1117 那种冷黑。
+     冷黑配暖纸是两块互不相干的材质，像在信纸上贴了张屏幕截图；
+     带一点棕的炭黑是「印刷品里的图版」——同一套纸和墨，只是把明暗翻过来。 */
+  --color-code: #211f1b;
+
+  /* 中文优先的系统字体栈。
+     刻意不引 Web Font：这个站的正文基本是中文，西文字体（Geist / Inter）
+     都不带中文字形，引进来只会让中文落回系统字体、西文单独一套，
+     一个页面上出现两种气质。系统栈在 macOS 上就是 PingFang SC。 */
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC',
+    'Hiragino Sans GB', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-mono: 'SF Mono', Menlo, Consolas, monospace;
+
+  /* 680px 是站点的手机断点。加进 @theme 后可以直接写 xs: / max-xs:，
+     比散落一堆 max-[680px]: 更好 grep，改断点时也只改这一行 */
+  --breakpoint-xs: 680px;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * 全局基线
+ *
+ * 只放「不属于任何组件」的东西：页面底色与字体、选中色、滚动条、焦点环，
+ * 以及一条 prefers-reduced-motion 的兜底。其余全部走组件上的工具类。
+ * ------------------------------------------------------------------ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-page);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* 标题折行时避免孤字：中文标题两三行时效果明显 */
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  /* Tailwind 的 Preflight 把 button 的 cursor 归一成了 default */
+  button:not(:disabled) {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: rgb(9 105 218 / 18%);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cfcabf;
+    border: 3px solid transparent;
+    border-radius: 999px;
+    background-clip: content-box;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #b3ada1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * 自定义工具类
+ *
+ * 只有两种情况才配写在这里：
+ *   1. 一堆声明会被多处复用，或者内容不在 HTML 里 —— 伪元素、mask、多列；
+ *   2. 子元素是靠 nth-child / 后代选择器选中的，逐个挂类名不现实。
+ * 其余一律直接写在组件上。
+ * ------------------------------------------------------------------ */
+
+/* 页脚的方格纸底纹 */
+@utility grid-paper {
+  background-color: var(--color-page);
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* 照片页：列布局做瀑布流，照片高度不一，按列排才不会有空洞 */
+@utility photo-masonry {
+  columns: 3 280px;
+  column-gap: 14px;
+}
+
+/* 页面落场：整体淡入一次。
+   原来是「子元素依次浮起」（靠 nth-child 排延迟），那是落地页模板的招牌动作 ——
+   一排卡片排队往上弹，比内容本身还抢眼。这里只留一次很短的淡入，
+   位移也压到 6px：让人看到「页面来了」，而不是看到动画。 */
+@utility page-enter {
+  animation: rise 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ------------------------------------------------------------------ *
+ * 正文排版（prose）
+ *
+ * 这一块是**有意留在 CSS 里**的，因为它样式化的 DOM 不由组件写：
+ * 文章正文是 markdown 编译出来的 HTML，文档正文是几十个语义标签嵌套。
+ * 给每个 <p> / <li> / <td> 挂一遍类名既做不到（markdown 那边不经过 JSX），
+ * 也没意义（它们永远是这个样式）。这就是 @tailwindcss/typography 里
+ * `prose` 的做法，只是这里只有两页，手写比装一个插件省事。
+ *
+ * 放在 @layer components 而不是裸写：这样工具类还能局部覆盖它
+ * （比如某个提示段落要换成灰色小字），而层级顺序交给 Tailwind 管。
+ * ------------------------------------------------------------------ */
+@layer components {
+  /* 文章页 —— 渲染自 docs/01-from-switch-to-schema.md
+     正文比 About 页大一号：那一页是说明，这一页是要读完的。 */
+  .prose-article {
+    font-size: 15px;
+    line-height: 1.85;
+    color: var(--color-body);
+  }
+
+  .prose-article > *:first-child {
+    margin-top: 0;
+  }
+
+  .prose-article h1 {
+    margin: 0 0 28px;
+    font-size: 30px;
+    font-weight: 600;
+    line-height: 1.45;
+    color: var(--color-ink);
+  }
+
+  .prose-article h2 {
+    margin: 44px 0 14px;
+    padding-bottom: 9px;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--color-ink);
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .prose-article h3 {
+    margin: 28px 0 10px;
+    font-size: 15.5px;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  .prose-article p {
+    margin: 0 0 16px;
+  }
+
+  .prose-article ul,
+  .prose-article ol {
+    margin: 0 0 16px;
+    padding-left: 22px;
+  }
+
+  .prose-article li {
+    margin-bottom: 6px;
+  }
+
+  .prose-article li > ul,
+  .prose-article li > ol {
+    margin-top: 6px;
+    margin-bottom: 0;
+  }
+
+  .prose-article strong {
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  /* 中文斜体不好看，落款之类的用途一律走灰色而不是斜体 */
+  .prose-article em {
+    font-style: normal;
+    color: var(--color-dim);
+  }
+
+  .prose-article a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .prose-article a:hover {
+    text-decoration: underline;
+  }
+
+  .prose-article hr {
+    margin: 40px 0;
+    border: none;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .prose-article blockquote {
+    margin: 0 0 18px;
+    padding: 13px 16px;
+    border-left: 3px solid var(--color-accent);
+    border-radius: 0 8px 8px 0;
+    background: var(--color-page);
+    color: var(--color-ink);
+  }
+
+  .prose-article blockquote p {
+    margin: 0;
+  }
+
+  /* 配图（drawio 风格的 SVG，白底）。
+     页面上图基本都是白色背景，所以给一层细边框当画框，免得「浮」在白底上。 */
+  .prose-article img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 28px 0 10px;
+    border: 1px solid var(--color-line);
+    border-radius: 10px;
+  }
+
+  /* 图注：markdown 里「图片段落」后面紧跟的引用块，当成图注排（小号灰字居中）。
+     用 :has 精确定位，正文里普通的引用块不受影响。 */
+  .prose-article p:has(> img) + blockquote {
+    margin: 0 0 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    text-align: center;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: var(--color-faint);
+  }
+
+  .prose-article code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: #eee8da;
+    color: #4a443b;
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  /* 代码块：暖炭底 + 无边框。
+     上一版是米白浅底 —— 它和页面、图、表确实是同一种材质，但代码失去了
+     该有的「这一段不是散文」的份量，一屏扫过去分不出哪块是要读的、哪块是要抄的。
+     深底本身不是问题，冷黑才是：换成带棕的炭黑之后，它更像书中插页的图版，
+     而不是从别的网站截过来的一块补丁。
+     边框去掉：深色块和纸的边界已经足够，再描一圈浅灰反而毛边。 */
+  .prose-article pre {
+    margin: 0 0 20px;
+    padding: 16px 18px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--color-code);
+    overflow-x: auto;
+    line-height: 1.7;
+  }
+
+  .prose-article pre code {
+    padding: 0;
+    background: none;
+    color: #e3ddd1;
+    font-size: 12.5px;
+  }
+
+  .prose-article table {
+    width: 100%;
+    margin: 6px 0 20px;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  .prose-article th,
+  .prose-article td {
+    padding: 8px 12px;
+    border: 1px solid var(--color-line);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .prose-article th {
+    background: #f4f0e6;
+    font-weight: 500;
+    color: var(--color-dim);
+  }
+
+  /* 文档页的正文。和文章页同一套路，字号小一档 —— 它是要被当手册查的 */
+  .prose-docs h1 {
+    margin: 0 0 18px;
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  .prose-docs h2 {
+    margin: 34px 0 12px;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  .prose-docs p {
+    margin: 0 0 14px;
+    color: var(--color-body);
+    font-size: 14px;
+    line-height: 1.85;
+  }
+
+  .prose-docs strong {
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  /* 中文不用斜体，强调一律走主题色 */
+  .prose-docs em {
+    font-style: normal;
+    color: var(--color-accent);
+  }
+
+  .prose-docs code {
+    padding: 1px 5px;
+    border-radius: 4px;
+    background: #eee8da;
+    color: #4a443b;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+  }
+
+  /* 代码块（文档页的 <Code> 组件渲染出来的就是 <pre><code>） */
+  .prose-docs pre {
+    margin: 0 0 18px;
+    padding: 15px 17px;
+    border: 0;
+    border-radius: 10px;
+    background: var(--color-code);
+    overflow-x: auto;
+  }
+
+  .prose-docs pre code {
+    padding: 0;
+    background: none;
+    color: #e3ddd1;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  .prose-docs table {
+    width: 100%;
+    margin: 0 0 18px;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .prose-docs th,
+  .prose-docs td {
+    padding: 8px 12px;
+    border: 1px solid var(--color-line);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .prose-docs th {
+    background: #f4f0e6;
+    font-weight: 500;
+    color: var(--color-dim);
+    white-space: nowrap;
+  }
+
+  /* 表格里的字段名要跟同列的说明字对齐，压小半号 */
+  .prose-docs table code {
+    font-size: 12px;
+  }
+
+  /* highlight.js token 配色 —— 暖炭底上的三色。
+     前几版的问题不是「颜色多少」，是颜色和底色的关系：浅底时无论给几种色，
+     代码块都在跟正文抢同一层注意力；深底的对比之下，三个低饱和色相就够了。
+     铜（关键字）、苔绿（字符串）、雾蓝（函数名），其余全交给暖白和字重。
+     选色都往灰里退了一档 —— 深底上的高饱和色会发光，看着累。 */
+  .prose-article code .hljs-comment,
+  .prose-docs code .hljs-comment {
+    color: #7b7466;
+    font-style: italic;
+  }
+
+  .prose-article code .hljs-keyword,
+  .prose-article code .hljs-built_in,
+  .prose-article code .hljs-type,
+  .prose-article code .hljs-selector-tag,
+  .prose-docs code .hljs-keyword,
+  .prose-docs code .hljs-built_in,
+  .prose-docs code .hljs-type,
+  .prose-docs code .hljs-selector-tag {
+    color: #d99a6c;
+    font-weight: 500;
+  }
+
+  .prose-article code .hljs-string,
+  .prose-article code .hljs-regexp,
+  .prose-docs code .hljs-string,
+  .prose-docs code .hljs-regexp {
+    color: #a9bd8a;
+  }
+
+  .prose-article code .hljs-number,
+  .prose-article code .hljs-literal,
+  .prose-docs code .hljs-number,
+  .prose-docs code .hljs-literal {
+    color: #cfb894;
+  }
+
+  .prose-article code .hljs-attr,
+  .prose-article code .hljs-property,
+  .prose-article code .hljs-variable,
+  .prose-docs code .hljs-attr,
+  .prose-docs code .hljs-property,
+  .prose-docs code .hljs-variable {
+    color: #e3ddd1;
+  }
+
+  .prose-article code .hljs-title,
+  .prose-article code .hljs-function,
+  .prose-docs code .hljs-title,
+  .prose-docs code .hljs-function {
+    color: #92b6d0;
+  }
+
+  .prose-article code .hljs-punctuation,
+  .prose-article code .hljs-params,
+  .prose-docs code .hljs-punctuation,
+  .prose-docs code .hljs-params {
+    color: #8b8274;
+  }
+}

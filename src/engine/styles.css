@@ -1,0 +1,513 @@
+/* ------------------------------------------------------------------ *
+ * 引擎自己的样式。全部 df- 前缀，与站点无关。
+ *
+ * 为什么是一个独立的 .css 而不是走 Tailwind：
+ *   1. 引擎要能被整个抽成包。它的样式必须能跟着一起走，不能依赖宿主的
+ *      设计变量 —— 所以下面全部是自带的字面量，宿主一个都不需要提供。
+ *   2. 引擎渲染出的 DOM 里，类名是它自己写的（df-*），宿主不一定用 Tailwind。
+ *      把样式写在工具类里，等于要求宿主也装 Tailwind。
+ *
+ * 想改配色（比如接到 antd 主题上），改下面这一块就够 ——
+ *   #171717 正文主色   #666 次级   #8f8f8f 三级
+ *   #eaeaea 细边线     #d4d4d4 控件边
+ *   #0070f3 强调色     #eef6ff 强调底色
+ *   #d92d20 错误       #067647 成功
+ * ------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------ *
+ * 表单容器与栅格
+ * ------------------------------------------------------------------ */
+
+.df-form-head {
+  margin-bottom: 16px;
+}
+
+.df-form-head h3 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.df-form-head p {
+  margin: 0;
+  color: #666666;
+  font-size: 12.5px;
+}
+
+.df-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 14px 16px;
+}
+
+.df-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.df-span-4 {
+  grid-column: span 4;
+}
+
+.df-span-6 {
+  grid-column: span 6;
+}
+
+.df-span-8 {
+  grid-column: span 8;
+}
+
+.df-span-12 {
+  grid-column: span 12;
+}
+
+@media (max-width: 900px) {
+  .df-span-4,
+  .df-span-6,
+  .df-span-8 {
+    grid-column: span 12;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * 标签
+ * ------------------------------------------------------------------ */
+
+.df-label {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 12.5px;
+  color: #344054;
+}
+
+.df-label-text {
+  display: inline-flex;
+  align-items: baseline;
+}
+
+.df-label-hint {
+  color: #8f8f8f;
+  font-size: 11.5px;
+}
+
+.df-required {
+  color: #d92d20;
+  font-style: normal;
+  margin-left: 3px;
+}
+
+/* ------------------------------------------------------------------ *
+ * 控件的公共外壳（输入框 / 文本域 / 下拉）
+ * ------------------------------------------------------------------ */
+
+.df-control {
+  width: 100%;
+  height: 34px;
+  padding: 0 10px;
+  border: 1px solid #d4d4d4;
+  border-radius: 7px;
+  background: #fff;
+  color: #171717;
+  font-size: 13px;
+  outline: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+
+  &:focus {
+    border-color: #0070f3;
+    box-shadow: 0 0 0 3px rgb(37 99 235 / 12%);
+  }
+
+  &:disabled {
+    background: #f9fafb;
+    color: #8f8f8f;
+    border-color: #eaeaea;
+  }
+
+  &.is-invalid {
+    border-color: #d92d20;
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgb(217 45 32 / 12%);
+    }
+  }
+}
+
+textarea.df-control {
+  height: auto;
+  padding: 8px 10px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.df-error {
+  color: #d92d20;
+  font-size: 11.5px;
+}
+
+/* ------------------------------------------------------------------ *
+ * 单选 / 多选的胶囊，以及开关
+ * ------------------------------------------------------------------ */
+
+.df-choice {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.df-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  border: 1px solid #d4d4d4;
+  border-radius: 999px;
+  font-size: 12.5px;
+  color: #666666;
+  cursor: pointer;
+
+  input {
+    display: none;
+  }
+
+  &.is-on {
+    background: #eef6ff;
+    border-color: #0070f3;
+    color: #0070f3;
+  }
+}
+
+.df-switch {
+  width: 40px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: #d0d5dd;
+  position: relative;
+  transition: background 0.15s;
+
+  &.is-on {
+    background: #0070f3;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.df-switch-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s;
+
+  .df-switch.is-on & {
+    transform: translateX(18px);
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * 分组 / 列表 / 表格：三种块级节点都占满整行
+ * ------------------------------------------------------------------ */
+
+.df-block {
+  grid-column: span 12;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+  padding: 14px;
+  background: #fcfcfd;
+}
+
+.df-block-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+
+  h4 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.df-block-desc {
+  margin: -6px 0 12px;
+  color: #666666;
+  font-size: 12px;
+}
+
+.df-count {
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: #eef0f3;
+  color: #666666;
+  font-size: 11.5px;
+  font-weight: 400;
+}
+
+.df-collapse {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: #171717;
+
+  &.is-static {
+    cursor: default;
+  }
+}
+
+.df-caret {
+  width: 0;
+  height: 0;
+  border-left: 4px solid #8f8f8f;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  transform: rotate(90deg);
+  transition: transform 0.15s;
+
+  &.is-collapsed {
+    transform: rotate(0deg);
+  }
+}
+
+.df-list-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.df-list-item {
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+}
+
+.df-list-item-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.df-list-item-title {
+  font-size: 12.5px;
+  color: #344054;
+  font-weight: 500;
+}
+
+.df-actions {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.df-icon-btn {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #eaeaea;
+  border-radius: 6px;
+  background: #fff;
+  color: #666666;
+  font-size: 13px;
+  line-height: 1;
+
+  &:hover:not(:disabled) {
+    border-color: #d4d4d4;
+    color: #171717;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+  }
+
+  &.is-danger:hover:not(:disabled) {
+    border-color: #d92d20;
+    color: #d92d20;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * 按钮：引擎内自带的一份，不继承宿主的按钮样式
+ * ------------------------------------------------------------------ */
+
+.df-btn {
+  padding: 5px 12px;
+  border: 1px solid #d4d4d4;
+  border-radius: 7px;
+  background: #fff;
+  color: #171717;
+  font-size: 12.5px;
+
+  &:hover:not(:disabled) {
+    border-color: #0070f3;
+    color: #0070f3;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+  }
+
+  &.is-primary {
+    background: #0070f3;
+    border-color: #0070f3;
+    color: #fff;
+
+    &:hover:not(:disabled) {
+      background: #1d4ed8;
+      color: #fff;
+    }
+  }
+}
+
+.df-empty,
+.df-empty-cell {
+  padding: 22px;
+  text-align: center;
+  color: #8f8f8f;
+  font-size: 12.5px;
+  border: 1px dashed #d4d4d4;
+  border-radius: 8px;
+}
+
+/* ------------------------------------------------------------------ *
+ * 表格
+ * ------------------------------------------------------------------ */
+
+.df-table-scroll {
+  overflow-x: auto;
+}
+
+.df-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+
+  th {
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 500;
+    color: #666666;
+    background: #fafbfc;
+    border-bottom: 1px solid #eaeaea;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #f2f4f7;
+    vertical-align: middle;
+
+    &.is-invalid {
+      background: #fef3f2;
+    }
+  }
+
+  tfoot td {
+    padding: 8px 10px;
+    background: #fafbfc;
+    border-top: 1px solid #eaeaea;
+    font-weight: 500;
+  }
+
+  .df-control {
+    height: 30px;
+    font-size: 12.5px;
+  }
+}
+
+.df-td-index {
+  color: #8f8f8f;
+  text-align: center;
+}
+
+.df-td-op {
+  text-align: center;
+}
+
+.df-locked {
+  display: inline-block;
+  padding: 4px 0;
+  color: #8f8f8f;
+}
+
+.df-cell-error {
+  margin-top: 3px;
+  color: #d92d20;
+  font-size: 11px;
+}
+
+/* ------------------------------------------------------------------ *
+ * 提交被拦时抖一下，不然滚过去了也不知道该看哪
+ * ------------------------------------------------------------------ */
+
+@keyframes df-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-4px);
+  }
+
+  40% {
+    transform: translateX(4px);
+  }
+
+  60% {
+    transform: translateX(-3px);
+  }
+
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+.df-shake {
+  animation: df-shake 0.5s ease;
+}
+
+/* ------------------------------------------------------------------ *
+ * 表单底部的动作条。它由宿主拼在 <DynamicForm> 之后，
+ * 所以不在 .df-form 里面，样式得独立成立。
+ * ------------------------------------------------------------------ */
+
+.df-form-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #eaeaea;
+}
+
+.df-status {
+  font-size: 12.5px;
+
+  &.is-ok {
+    color: #067647;
+  }
+
+  &.is-error {
+    color: #d92d20;
+  }
+}

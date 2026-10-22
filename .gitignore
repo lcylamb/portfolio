@@ -1,0 +1,21 @@
+# 依赖与构建产物
+node_modules
+.next
+out
+dist
+coverage
+
+# Next 生成的文件
+next-env.d.ts
+*.tsbuildinfo
+
+# 系统与本地配置
+.DS_Store
+*.local
+
+# 改版前的备份（含脱敏前的旧文案，不能进公开仓库）
+.backup-20261022/
+
+# 写作脚手架，只给自己看，不进公开仓库
+docs/01-outline.md
+.readme-full.bak

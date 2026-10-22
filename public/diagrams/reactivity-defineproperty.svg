@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 340" width="780" height="340" role="img" aria-label="Vue2 响应式：初始化时递归劫持每一个已有属性，getter 收集依赖，setter 派发更新；新增属性、数组索引和 length 无法被劫持">
+  <defs>
+    <marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#4d4d4d"/>
+    </marker>
+  </defs>
+  <rect width="780" height="340" fill="#ffffff"/>
+  <g font-family="Helvetica, Arial, sans-serif" font-size="12" fill="#333333">
+
+    <text x="390" y="28" text-anchor="middle" font-size="12.5" font-weight="bold">Vue2：初始化时递归遍历，给每个「已存在的属性」装上 getter / setter</text>
+
+    <!-- 左：数据对象树 -->
+    <text x="200" y="60" text-anchor="middle" font-size="11" fill="#4a6785">data 对象树（理赔表单）</text>
+    <rect x="150" y="74" width="100" height="34" rx="5" fill="#dae8fc" stroke="#6c8ebf"/>
+    <text x="200" y="95" text-anchor="middle">claimForm</text>
+
+    <path d="M170 108 L120 146" fill="none" stroke="#4d4d4d" marker-end="url(#m1)"/>
+    <path d="M200 108 L200 146" fill="none" stroke="#4d4d4d" marker-end="url(#m1)"/>
+    <path d="M230 108 L290 146" fill="none" stroke="#4d4d4d" marker-end="url(#m1)"/>
+
+    <rect x="70" y="150" width="96" height="32" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="118" y="170" text-anchor="middle">claimScene</text>
+    <rect x="172" y="150" width="72" height="32" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="208" y="170" text-anchor="middle">amount</text>
+    <rect x="270" y="150" width="104" height="32" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="322" y="170" text-anchor="middle">fileList [ ]</text>
+
+    <path d="M288 182 L266 214" fill="none" stroke="#4d4d4d" marker-end="url(#m1)"/>
+    <path d="M330 182 L336 214" fill="none" stroke="#4d4d4d" marker-end="url(#m1)"/>
+
+    <rect x="230" y="218" width="56" height="28" rx="5" fill="#f8cecc" stroke="#b85450"/>
+    <text x="258" y="237" text-anchor="middle">[0]</text>
+    <rect x="296" y="218" width="78" height="28" rx="5" fill="#f8cecc" stroke="#b85450"/>
+    <text x="335" y="237" text-anchor="middle">length</text>
+
+    <path d="M100 182 L96 214" fill="none" stroke="#b85450" stroke-dasharray="5 4"/>
+    <rect x="60" y="218" width="120" height="28" rx="5" fill="#f8cecc" stroke="#b85450" stroke-dasharray="6 4"/>
+    <text x="120" y="237" text-anchor="middle">newKey（新增）</text>
+
+    <!-- 中：箭头 -->
+    <path d="M368 160 H416" fill="none" stroke="#4d4d4d" marker-end="url(#m1)"/>
+    <text x="392" y="150" text-anchor="middle" font-size="10.5" fill="#667085">defineProperty</text>
+
+    <!-- 右：getter / setter / Dep -->
+    <text x="590" y="60" text-anchor="middle" font-size="11" fill="#4a6785">绿色属性：读写都被代理</text>
+    <rect x="440" y="74" width="120" height="46" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="500" y="92" text-anchor="middle" font-weight="bold">getter</text>
+    <text x="500" y="110" text-anchor="middle" font-size="10.5">读取时收集依赖</text>
+    <rect x="440" y="150" width="120" height="46" rx="5" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="500" y="168" text-anchor="middle" font-weight="bold">setter</text>
+    <text x="500" y="186" text-anchor="middle" font-size="10.5">写入时派发更新</text>
+
+    <path d="M560 97 L596 130" fill="none" stroke="#4d4d4d" marker-end="url(#m1)"/>
+    <path d="M560 173 L596 142" fill="none" stroke="#4d4d4d" marker-end="url(#m1)"/>
+
+    <rect x="600" y="112" width="72" height="48" rx="5" fill="#fff2cc" stroke="#d6b656"/>
+    <text x="636" y="133" text-anchor="middle" font-weight="bold">Dep</text>
+    <text x="636" y="150" text-anchor="middle" font-size="10.5">依赖集合</text>
+
+    <path d="M672 136 L704 136" fill="none" stroke="#4d4d4d" marker-end="url(#m1)"/>
+    <rect x="706" y="114" width="62" height="44" rx="5" fill="#e1d5e7" stroke="#9673a6"/>
+    <text x="737" y="132" text-anchor="middle" font-size="10.5">视图</text>
+    <text x="737" y="148" text-anchor="middle" font-size="10.5">重新渲染</text>
+
+    <!-- 底部说明 -->
+    <rect x="24" y="278" width="14" height="14" fill="#d5e8d4" stroke="#82b366"/>
+    <text x="46" y="290" font-size="11.5" fill="#667085">被 defineProperty 劫持：读写可追踪</text>
+    <rect x="300" y="278" width="14" height="14" fill="#f8cecc" stroke="#b85450"/>
+    <text x="322" y="290" font-size="11.5" fill="#667085">够不着的三类：新增属性、数组索引、length</text>
+    <text x="24" y="320" font-size="11.5" fill="#667085">Vue2 的补丁：Vue.set / Vue.delete 手动通知；重写 push / pop / shift / unshift / splice / sort / reverse 七个变异方法</text>
+  </g>
+</svg>
