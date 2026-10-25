@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { localeFromPath, type Locale } from '@/site/i18n';
+import ThemeToggle from './theme-toggle';
 
 // 悬浮毛玻璃导航条。它必须是个客户端组件 —— 高亮当前项和语言切换都要读路径，
 // 而 usePathname 是 hook。
@@ -79,9 +80,10 @@ export default function SiteNav() {
             );
           })}
         </div>
-        {/* 语言切换：mono 小字挂在最右，不参与菜单的居中布局。
-            当前语言显示为弱色、不可点；目标语言才亮。 */}
-        <div className="absolute right-6 flex items-center gap-2 font-mono text-[11.5px] max-xs:right-4">
+        {/* 右侧常驻：主题切换 + 语言切换。都走 mono 小字，弱色、hover 才亮。 */}
+        <div className="absolute right-6 flex items-center gap-3.5 font-mono text-[11.5px] max-xs:right-4">
+          <ThemeToggle />
+          <span aria-hidden className="h-3 w-px bg-line" />
           {lang === 'en' ? (
             <>
               <span className="text-faint">EN</span>

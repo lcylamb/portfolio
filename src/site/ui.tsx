@@ -19,7 +19,7 @@ export function Btn(props: {
   // 形状是 6px 小圆角而不是胶囊：胶囊配上大圆角卡片，整个站会显得「泡泡的」，
   // 这里宁方勿圆，和「工程笔记」的语气一致。
   const skin = primary
-    ? 'border-ink bg-ink text-white hover:border-[#383838] hover:bg-[#383838] hover:text-white'
+    ? 'border-ink bg-ink text-page hover:border-btn-hover hover:bg-btn-hover hover:text-page'
     : 'border-line bg-surface text-ink hover:border-ink';
   return (
     <Link

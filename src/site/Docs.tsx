@@ -1278,7 +1278,7 @@ function ConditionsSection({ t }: { t: DocsContent['conditions'] }) {
         <li>{t.step1}</li>
         <li>{t.step2}</li>
       </ol>
-      <p className="mb-3.5 rounded-r-lg border-l-[3px] border-danger bg-danger-soft px-3.5 py-[11px] text-[13px] text-[#912018]">
+      <p className="mb-3.5 rounded-r-lg border-l-[3px] border-danger bg-danger-soft px-3.5 py-[11px] text-[13px] text-danger-ink">
         {t.pathWarning}
       </p>
       <p>{t.hasPathPara}</p>

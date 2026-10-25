@@ -4,7 +4,16 @@ import About from '@/site/About';
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'Frontend developer, based in Shenzhen. Four years of B-side back-office systems, mostly in insurance.',
+    'Frontend developer in Shenzhen. Most of the past four years went into insurance back-office — calculation, adjudication, dispatch: long workflows, hundreds of fields, and mistakes that cost real money.',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    siteName: "Pluvia's Trail",
+    title: 'About · Pluvia\'s Trail',
+    description:
+      'Frontend developer in Shenzhen. Most of the past four years went into insurance back-office — calculation, adjudication, dispatch: long workflows, hundreds of fields, and mistakes that cost real money.',
+    images: ['https://lcylamb.github.io/portfolio/photos/photo-06.webp'],
+  },
 };
 
 export default function AboutPage() {

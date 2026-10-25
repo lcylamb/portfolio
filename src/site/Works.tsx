@@ -51,7 +51,7 @@ const BFF_POINTS = {
     '结构化输出：POST /assistant/ask 固定返回 { conclusion, evidence[], insufficient }。单号格式和问题长度在进模型之前就被 DTO 拦掉，查不到的单号返回 404 —— 而不是让模型编一张出来',
     'SSE 流式：POST /assistant/askStream 逐字下发，前端是一个原生 JS 页面、由 Nest 静态托管，点开就能用；客户端断线即掐掉模型请求，不空烧 token',
     '限流默认开：全局限流守卫 30 次 / 分 / IP，只给 /health 显式豁免 —— 默认开着才防得住「新加了个端点，忘了给它加限流」',
-    '10 条评测用例同时打「流式」和「非流式」两个端点，逐条比对增量吐出的字与最终结论是否逐字一致，并按「依据里出现数据之外的字段」统计幻觉率',
+    '23 条评测用例同时打「流式」和「非流式」两个端点，逐条比对增量吐出的字与最终结论是否逐字一致，并按「依据里出现数据之外的字段」统计幻觉率',
     '自己写的 Dockerfile + compose，部署在 Render 上，在线链接就在下面',
   ],
   en: [
@@ -59,7 +59,7 @@ const BFF_POINTS = {
     'Structured output: POST /assistant/ask always returns { conclusion, evidence[], insufficient }. Malformed claim numbers and overlong questions are stopped by the DTO before they reach the model; an unknown claim number returns 404 — the model never invents one',
     'SSE streaming: POST /assistant/askStream delivers token by token to a plain-JS page served statically by Nest — open it and ask; a dropped client connection cancels the model request instead of burning tokens for nobody',
     'Rate limiting is on by default: a global guard at 30 req/min/IP with an explicit exemption only for /health — defaults are what catch "added an endpoint, forgot to rate-limit it"',
-    '10 eval cases hit both the streaming and non-streaming endpoints, checking that streamed deltas assemble into exactly the final answer, and counting hallucinations as "fields in the evidence that are not in the data"',
+    '23 eval cases hit both the streaming and non-streaming endpoints, checking that streamed deltas assemble into exactly the final answer, and counting hallucinations as "fields in the evidence that are not in the data"',
     'Hand-written Dockerfile + compose, deployed on Render — live link below',
   ],
 } as const;

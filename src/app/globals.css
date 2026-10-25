@@ -12,44 +12,122 @@
 /* ------------------------------------------------------------------ *
  * 设计 token
  *
- * 这些原来是 Less 变量（@text / @accent ...），写成 @theme 之后
- * 每个 token 会同时变成工具类：
- *   --color-ink   →  text-ink / bg-ink / border-ink
- *   --font-mono   →  font-mono
- * 所以下面组件里不会再出现任何硬编码色值，配色只有这一处可改。
+ * 分两层：
+ *   --c-*   裸变量，只有这里定义，:root 是浅色、html.dark 是暗色；
+ *   @theme inline 把它们接成 Tailwind token（text-ink / bg-line ...）。
+ * 用 inline 的原因：工具类直接引用 var 本体，切主题时同一批类名自动换色，
+ * 组件里不需要出现任何 dark: 前缀。
+ *
+ * 暗色不是把明度翻过来：色相全部保留暖调（棕灰不是蓝灰），
+ * 对比降一档（暗底上的纯白字会晃眼），强调色提亮一档补回对比。
  * ------------------------------------------------------------------ */
-@theme {
+@theme inline {
+  --color-page: var(--c-page);
+  --color-surface: var(--c-surface);
+  --color-line: var(--c-line);
+  --color-line-strong: var(--c-line-strong);
+
+  --color-ink: var(--c-ink);
+  --color-body: var(--c-body);
+  --color-dim: var(--c-dim);
+  --color-faint: var(--c-faint);
+
+  --color-accent: var(--c-accent);
+  --color-accent-soft: var(--c-accent-soft);
+  --color-danger: var(--c-danger);
+  --color-danger-soft: var(--c-danger-soft);
+  --color-danger-ink: var(--c-danger-ink);
+  --color-ok: var(--c-ok);
+  --color-ok-soft: var(--c-ok-soft);
+  --color-warn: var(--c-warn);
+  --color-warn-soft: var(--c-warn-soft);
+
+  --color-code: var(--c-code);
+  --color-code-inline-bg: var(--c-code-inline-bg);
+  --color-code-inline-fg: var(--c-code-inline-fg);
+  --color-table-head-bg: var(--c-table-head-bg);
+  --color-btn-hover: var(--c-btn-hover);
+}
+
+:root {
   /* 暖纸色系。原来的 #fafafa / #eaeaea 是纯中性灰 —— 干净，但和世界上
      每一个默认模板长一样。往暖里挪半档（纸色、亚麻灰），页面像纸，
      不像 Figma 画布。 */
+  --c-page: #faf9f6;
+  --c-surface: #ffffff;
+  --c-line: #e8e5de;
+  --c-line-strong: #d3cfc5;
 
-  --color-page: #faf9f6;
-  --color-surface: #ffffff;
-  --color-line: #e8e5de;
-  --color-line-strong: #d3cfc5;
-
-  --color-ink: #1c1a17; /* 标题、正文主色 */
-  --color-body: #45403a; /* 段落正文，比主色浅一档 */
-  --color-dim: #6f6a61; /* 次级信息 */
-  --color-faint: #a09a8e; /* 三级信息、日期 */
+  --c-ink: #1c1a17; /* 标题、正文主色 */
+  --c-body: #45403a; /* 段落正文，比主色浅一档 */
+  --c-dim: #6f6a61; /* 次级信息 */
+  --c-faint: #a09a8e; /* 三级信息、日期 */
 
   /* 链接蓝。#0070f3 是 Vercel 的品牌蓝，一整站都用它，
      配色就自动带上了那套模板的气味；换成 GitHub 文档页的蓝，
      饱和度和明度都低一档，是「看文档」的蓝，不是「产品落地页」的蓝。 */
-  --color-accent: #0969da;
-  --color-accent-soft: #ecf3fd;
-  --color-danger: #d92d20;
-  --color-danger-soft: #fef3f2;
-  --color-ok: #067647;
-  --color-ok-soft: #ecfdf3;
-  --color-warn: #b54708;
-  --color-warn-soft: #fffaeb;
+  --c-accent: #0969da;
+  --c-accent-soft: #ecf3fd;
+  --c-danger: #d92d20;
+  --c-danger-soft: #fef3f2;
+  --c-danger-ink: #912018; /* danger-soft 提示框里的正文字色 */
+  --c-ok: #067647;
+  --c-ok-soft: #ecfdf3;
+  --c-warn: #b54708;
+  --c-warn-soft: #fffaeb;
 
   /* 代码块底色：暖炭黑，不是 #0d1117 那种冷黑。
      冷黑配暖纸是两块互不相干的材质，像在信纸上贴了张屏幕截图；
      带一点棕的炭黑是「印刷品里的图版」——同一套纸和墨，只是把明暗翻过来。 */
-  --color-code: #211f1b;
+  --c-code: #211f1b;
+  --c-code-inline-bg: #eee8da;
+  --c-code-inline-fg: #4a443b;
+  --c-table-head-bg: #f4f0e6;
+  --c-btn-hover: #383838;
 
+  --selection-bg: rgb(9 105 218 / 18%);
+  --scrollbar-thumb: #cfcabf;
+  --scrollbar-thumb-hover: #b3ada1;
+}
+
+html.dark {
+  color-scheme: dark;
+
+  /* 暖黑纸：底色保留一点棕，墨色降到 88% 亮度 —— 暗底纯白晃眼 */
+  --c-page: #191713;
+  --c-surface: #201d19;
+  --c-line: #33302a;
+  --c-line-strong: #45413a;
+
+  --c-ink: #e6e2d9;
+  --c-body: #c8c2b6;
+  --c-dim: #999387;
+  --c-faint: #6e695f;
+
+  --c-accent: #6ba3dc;
+  --c-accent-soft: #1b2a3c;
+  --c-danger: #ef6f63;
+  --c-danger-soft: #37201c;
+  --c-danger-ink: #f0a9a2;
+  --c-ok: #58b389;
+  --c-ok-soft: #1a2b21;
+  --c-warn: #d99f56;
+  --c-warn-soft: #322616;
+
+  /* 代码块本来就是暗的，暗色下只提亮半档和页面区分 */
+  --c-code: #232019;
+  --c-code-inline-bg: #2c2822;
+  --c-code-inline-fg: #d8d1c3;
+  --c-table-head-bg: #26231d;
+  --c-btn-hover: #c8c2b6;
+
+  --selection-bg: rgb(107 163 220 / 28%);
+  --scrollbar-thumb: #45413a;
+  --scrollbar-thumb-hover: #57524a;
+}
+
+/* 非颜色的 token（字体、断点）不随主题变，留在普通 @theme 里 */
+@theme {
   /* 中文优先的系统字体栈。
      刻意不引 Web Font：这个站的正文基本是中文，西文字体（Geist / Inter）
      都不带中文字形，引进来只会让中文落回系统字体、西文单独一套，
@@ -110,7 +188,7 @@
   }
 
   ::selection {
-    background: rgb(9 105 218 / 18%);
+    background: var(--selection-bg);
   }
 
   :focus-visible {
@@ -128,14 +206,14 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #cfcabf;
+    background: var(--scrollbar-thumb);
     border: 3px solid transparent;
     border-radius: 999px;
     background-clip: content-box;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #b3ada1;
+    background: var(--scrollbar-thumb-hover);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -289,7 +367,8 @@
   }
 
   /* 配图（drawio 风格的 SVG，白底）。
-     页面上图基本都是白色背景，所以给一层细边框当画框，免得「浮」在白底上。 */
+     页面上图基本都是白色背景，所以给一层细边框当画框，免得「浮」在白底上。
+     暗色下白底图会像一块发光的补丁，压一点亮度让它们待在页面里。 */
   .prose-article img {
     display: block;
     width: 100%;
@@ -297,6 +376,10 @@
     margin: 28px 0 10px;
     border: 1px solid var(--color-line);
     border-radius: 10px;
+  }
+
+  html.dark .prose-article img {
+    filter: brightness(0.88);
   }
 
   /* 图注：markdown 里「图片段落」后面紧跟的引用块，当成图注排（小号灰字居中）。
@@ -316,8 +399,8 @@
   .prose-article code {
     padding: 1px 5px;
     border-radius: 4px;
-    background: #eee8da;
-    color: #4a443b;
+    background: var(--c-code-inline-bg);
+    color: var(--c-code-inline-fg);
     font-family: var(--font-mono);
     font-size: 13px;
   }
@@ -361,7 +444,7 @@
   }
 
   .prose-article th {
-    background: #f4f0e6;
+    background: var(--c-table-head-bg);
     font-weight: 500;
     color: var(--color-dim);
   }
@@ -402,8 +485,8 @@
   .prose-docs code {
     padding: 1px 5px;
     border-radius: 4px;
-    background: #eee8da;
-    color: #4a443b;
+    background: var(--c-code-inline-bg);
+    color: var(--c-code-inline-fg);
     font-family: var(--font-mono);
     font-size: 12.5px;
   }
@@ -442,7 +525,7 @@
   }
 
   .prose-docs th {
-    background: #f4f0e6;
+    background: var(--c-table-head-bg);
     font-weight: 500;
     color: var(--color-dim);
     white-space: nowrap;
