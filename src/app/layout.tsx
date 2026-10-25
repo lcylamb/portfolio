@@ -39,7 +39,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout(props: { children: ReactNode }) {
   return (
-    <html lang="zh-CN">
+    // suppressHydrationWarning：html.dark 可能由下面的内联脚本在首帧前加上，
+    // 服务端渲染不知道用户的主题选择 —— 这是刻意的差异，不是水合错误。
+    <html lang="zh-CN" suppressHydrationWarning>
+      <head>
+        {/* 主题防闪烁：CSS/JS 加载前就定好 html.dark。
+            存过用存档，没存过跟系统。阻塞式内联脚本，代价可忽略（几十字节）。 */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{var t=localStorage.getItem('theme');var d=t?t==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;if(d)document.documentElement.classList.add('dark');}catch(e){}})();",
+          }}
+        />
+      </head>
       <body className="flex min-h-screen flex-col">
         <SiteNav />
 

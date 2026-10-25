@@ -97,12 +97,12 @@ export default function Playground() {
           ))}
         </div>
 
-        <div className="mx-3.5 mt-2.5 rounded-lg bg-accent-soft px-[11px] py-[9px] text-[12.5px] leading-[1.6] text-[#1d4ed8]">
+        <div className="mx-3.5 mt-2.5 rounded-lg bg-accent-soft px-[11px] py-[9px] text-[12.5px] leading-[1.6] text-accent">
           {activePreset.hint}
         </div>
 
         <textarea
-          className="min-h-[320px] w-full flex-1 resize-none border-t border-line bg-[#fbfbfc] px-3 py-3 font-mono text-[12px] leading-[1.65] text-body outline-none [tab-size:2]"
+          className="min-h-[320px] w-full flex-1 resize-none border-t border-line bg-page px-3 py-3 font-mono text-[12px] leading-[1.65] text-body outline-none [tab-size:2]"
           spellCheck={false}
           value={text}
           onChange={(e) => handleTextChange(e.target.value)}

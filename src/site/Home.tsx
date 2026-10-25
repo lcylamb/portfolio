@@ -38,7 +38,7 @@ const COPY = {
       },
       {
         title: 'LLM 问答 BFF',
-        desc: '把 LLM 接进业务后端的参考实现：NestJS 分层、结构化输出、SSE 流式、10 条评测用例。已部署，点开就能问。',
+        desc: '把 LLM 接进业务后端的参考实现：NestJS 分层、结构化输出、SSE 流式、23 条评测用例。已部署，点开就能问。',
       },
     ],
   },
@@ -61,7 +61,7 @@ const COPY = {
       },
       {
         title: 'LLM Q&A BFF',
-        desc: 'A reference implementation of LLM in a business backend: NestJS layering, structured output, SSE streaming, 10 eval cases. Deployed and live.',
+        desc: 'A reference implementation of LLM in a business backend: NestJS layering, structured output, SSE streaming, 23 eval cases. Deployed and live.',
       },
     ],
   },

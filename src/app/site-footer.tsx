@@ -34,9 +34,11 @@ export default function SiteFooter() {
           Pluvia · lcylamb
         </a>
       </span>
-        {/* Playground 单语共享：两种语言都指向 /playground */}
+        {/* Playground 单语共享：两种语言都指向 /playground。
+            黑底按钮 token 化：bg-ink 在暗色下自动翻成浅底深字，
+            不再是暗背景上一块看不清的黑。 */}
         <Link
-          className="rounded-md bg-[#111] px-5 py-2.5 font-mono text-[13px] text-white no-underline transition-colors hover:bg-[#383838]"
+          className="rounded-md bg-ink px-5 py-2.5 font-mono text-[13px] text-page no-underline transition-colors hover:bg-btn-hover"
           href="/playground"
         >
         {lang === 'en' ? 'Open Playground' : '打开 Playground'}

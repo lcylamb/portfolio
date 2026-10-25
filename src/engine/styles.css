@@ -3,16 +3,84 @@
  *
  * 为什么是一个独立的 .css 而不是走 Tailwind：
  *   1. 引擎要能被整个抽成包。它的样式必须能跟着一起走，不能依赖宿主的
- *      设计变量 —— 所以下面全部是自带的字面量，宿主一个都不需要提供。
+ *      设计变量 —— 所以下面的颜色全部引用本文件自带的 --eng-* 变量，
+ *      宿主一个都不需要提供（这套变量跟着文件走）。
  *   2. 引擎渲染出的 DOM 里，类名是它自己写的（df-*），宿主不一定用 Tailwind。
  *      把样式写在工具类里，等于要求宿主也装 Tailwind。
  *
- * 想改配色（比如接到 antd 主题上），改下面这一块就够 ——
+ * 配色集中在下面两个变量块里，浅色在 :root、暗色在 html.dark。
+ * 引擎不管宿主怎么做主题切换 —— 只要宿主往 <html> 上挂 dark 类
+ * （这是社区事实标准），暗色就自动生效；不挂就永远是浅色。
+ *
+ * 浅色基调：
  *   #171717 正文主色   #666 次级   #8f8f8f 三级
  *   #eaeaea 细边线     #d4d4d4 控件边
  *   #0070f3 强调色     #eef6ff 强调底色
  *   #d92d20 错误       #067647 成功
+ * 暗色基调：跟随站点 —— 暖棕灰不是蓝灰，对比降一档，强调色提亮补对比。
  * ------------------------------------------------------------------ */
+
+:root {
+  --eng-ink: #171717; /* 正文主色 */
+  --eng-label: #344054; /* 标签、列表项标题（偏冷一档的深灰） */
+  --eng-dim: #666666; /* 次级说明 */
+  --eng-faint: #8f8f8f; /* 三级信息、占位 */
+
+  --eng-line: #eaeaea; /* 细边线 */
+  --eng-line-soft: #f2f4f7; /* 表格行线 */
+  --eng-control-border: #d4d4d4; /* 控件边 */
+
+  --eng-accent: #0070f3;
+  --eng-accent-hover: #1d4ed8;
+  --eng-accent-soft: #eef6ff;
+  --eng-on-accent: #ffffff; /* 强调底上的文字 */
+  --eng-ring: rgb(37 99 235 / 12%);
+
+  --eng-danger: #d92d20;
+  --eng-danger-soft: #fef3f2;
+  --eng-danger-ring: rgb(217 45 32 / 12%);
+  --eng-ok: #067647;
+
+  --eng-control-bg: #fff; /* 输入框底 */
+  --eng-panel-bg: #fff; /* 列表项、图标按钮、按钮底 */
+  --eng-block-bg: #fcfcfd; /* 分组块底 */
+  --eng-thead-bg: #fafbfc; /* 表头/表尾底 */
+  --eng-disabled-bg: #f9fafb; /* 控件禁用底 */
+  --eng-chip-bg: #eef0f3; /* 计数徽章底 */
+  --eng-track: #d0d5dd; /* 开关轨道 */
+  --eng-knob: #fff; /* 开关圆钮 */
+}
+
+html.dark {
+  --eng-ink: #e6e2d9;
+  --eng-label: #c8c2b6;
+  --eng-dim: #9a948a;
+  --eng-faint: #6e695f;
+
+  --eng-line: #33302a;
+  --eng-line-soft: #2c2a24;
+  --eng-control-border: #45413a;
+
+  --eng-accent: #6ba3dc;
+  --eng-accent-hover: #8ab6e4;
+  --eng-accent-soft: #1b2a3c;
+  --eng-on-accent: #10151c;
+  --eng-ring: rgb(107 163 220 / 18%);
+
+  --eng-danger: #ef6f63;
+  --eng-danger-soft: #37201c;
+  --eng-danger-ring: rgb(239 111 99 / 18%);
+  --eng-ok: #58b389;
+
+  --eng-control-bg: #26231d;
+  --eng-panel-bg: #201d19;
+  --eng-block-bg: #242118;
+  --eng-thead-bg: #26231d;
+  --eng-disabled-bg: #26231d;
+  --eng-chip-bg: #2c2822;
+  --eng-track: #45413a;
+  --eng-knob: #e6e2d9;
+}
 
 /* ------------------------------------------------------------------ *
  * 表单容器与栅格
@@ -30,7 +98,7 @@
 
 .df-form-head p {
   margin: 0;
-  color: #666666;
+  color: var(--eng-dim);
   font-size: 12.5px;
 }
 
@@ -80,7 +148,7 @@
   align-items: baseline;
   gap: 8px;
   font-size: 12.5px;
-  color: #344054;
+  color: var(--eng-label);
 }
 
 .df-label-text {
@@ -89,12 +157,12 @@
 }
 
 .df-label-hint {
-  color: #8f8f8f;
+  color: var(--eng-faint);
   font-size: 11.5px;
 }
 
 .df-required {
-  color: #d92d20;
+  color: var(--eng-danger);
   font-style: normal;
   margin-left: 3px;
 }
@@ -107,10 +175,10 @@
   width: 100%;
   height: 34px;
   padding: 0 10px;
-  border: 1px solid #d4d4d4;
+  border: 1px solid var(--eng-control-border);
   border-radius: 7px;
-  background: #fff;
-  color: #171717;
+  background: var(--eng-control-bg);
+  color: var(--eng-ink);
   font-size: 13px;
   outline: none;
   transition:
@@ -118,21 +186,21 @@
     box-shadow 0.15s;
 
   &:focus {
-    border-color: #0070f3;
-    box-shadow: 0 0 0 3px rgb(37 99 235 / 12%);
+    border-color: var(--eng-accent);
+    box-shadow: 0 0 0 3px var(--eng-ring);
   }
 
   &:disabled {
-    background: #f9fafb;
-    color: #8f8f8f;
-    border-color: #eaeaea;
+    background: var(--eng-disabled-bg);
+    color: var(--eng-faint);
+    border-color: var(--eng-line);
   }
 
   &.is-invalid {
-    border-color: #d92d20;
+    border-color: var(--eng-danger);
 
     &:focus {
-      box-shadow: 0 0 0 3px rgb(217 45 32 / 12%);
+      box-shadow: 0 0 0 3px var(--eng-danger-ring);
     }
   }
 }
@@ -145,7 +213,7 @@ textarea.df-control {
 }
 
 .df-error {
-  color: #d92d20;
+  color: var(--eng-danger);
   font-size: 11.5px;
 }
 
@@ -164,10 +232,10 @@ textarea.df-control {
   align-items: center;
   gap: 6px;
   padding: 5px 11px;
-  border: 1px solid #d4d4d4;
+  border: 1px solid var(--eng-control-border);
   border-radius: 999px;
   font-size: 12.5px;
-  color: #666666;
+  color: var(--eng-dim);
   cursor: pointer;
 
   input {
@@ -175,9 +243,9 @@ textarea.df-control {
   }
 
   &.is-on {
-    background: #eef6ff;
-    border-color: #0070f3;
-    color: #0070f3;
+    background: var(--eng-accent-soft);
+    border-color: var(--eng-accent);
+    color: var(--eng-accent);
   }
 }
 
@@ -187,12 +255,12 @@ textarea.df-control {
   padding: 0;
   border: none;
   border-radius: 999px;
-  background: #d0d5dd;
+  background: var(--eng-track);
   position: relative;
   transition: background 0.15s;
 
   &.is-on {
-    background: #0070f3;
+    background: var(--eng-accent);
   }
 
   &:disabled {
@@ -207,7 +275,7 @@ textarea.df-control {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--eng-knob);
   transition: transform 0.15s;
 
   .df-switch.is-on & {
@@ -221,10 +289,10 @@ textarea.df-control {
 
 .df-block {
   grid-column: span 12;
-  border: 1px solid #eaeaea;
+  border: 1px solid var(--eng-line);
   border-radius: 10px;
   padding: 14px;
-  background: #fcfcfd;
+  background: var(--eng-block-bg);
 }
 
 .df-block-head {
@@ -245,15 +313,15 @@ textarea.df-control {
 
 .df-block-desc {
   margin: -6px 0 12px;
-  color: #666666;
+  color: var(--eng-dim);
   font-size: 12px;
 }
 
 .df-count {
   padding: 1px 7px;
   border-radius: 999px;
-  background: #eef0f3;
-  color: #666666;
+  background: var(--eng-chip-bg);
+  color: var(--eng-dim);
   font-size: 11.5px;
   font-weight: 400;
 }
@@ -265,7 +333,7 @@ textarea.df-control {
   padding: 0;
   border: none;
   background: none;
-  color: #171717;
+  color: var(--eng-ink);
 
   &.is-static {
     cursor: default;
@@ -275,7 +343,7 @@ textarea.df-control {
 .df-caret {
   width: 0;
   height: 0;
-  border-left: 4px solid #8f8f8f;
+  border-left: 4px solid var(--eng-faint);
   border-top: 4px solid transparent;
   border-bottom: 4px solid transparent;
   transform: rotate(90deg);
@@ -293,10 +361,10 @@ textarea.df-control {
 }
 
 .df-list-item {
-  border: 1px solid #eaeaea;
+  border: 1px solid var(--eng-line);
   border-radius: 8px;
   padding: 12px;
-  background: #fff;
+  background: var(--eng-panel-bg);
 }
 
 .df-list-item-head {
@@ -307,7 +375,7 @@ textarea.df-control {
 
 .df-list-item-title {
   font-size: 12.5px;
-  color: #344054;
+  color: var(--eng-label);
   font-weight: 500;
 }
 
@@ -323,16 +391,16 @@ textarea.df-control {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #eaeaea;
+  border: 1px solid var(--eng-line);
   border-radius: 6px;
-  background: #fff;
-  color: #666666;
+  background: var(--eng-panel-bg);
+  color: var(--eng-dim);
   font-size: 13px;
   line-height: 1;
 
   &:hover:not(:disabled) {
-    border-color: #d4d4d4;
-    color: #171717;
+    border-color: var(--eng-control-border);
+    color: var(--eng-ink);
   }
 
   &:disabled {
@@ -340,8 +408,8 @@ textarea.df-control {
   }
 
   &.is-danger:hover:not(:disabled) {
-    border-color: #d92d20;
-    color: #d92d20;
+    border-color: var(--eng-danger);
+    color: var(--eng-danger);
   }
 }
 
@@ -351,15 +419,15 @@ textarea.df-control {
 
 .df-btn {
   padding: 5px 12px;
-  border: 1px solid #d4d4d4;
+  border: 1px solid var(--eng-control-border);
   border-radius: 7px;
-  background: #fff;
-  color: #171717;
+  background: var(--eng-panel-bg);
+  color: var(--eng-ink);
   font-size: 12.5px;
 
   &:hover:not(:disabled) {
-    border-color: #0070f3;
-    color: #0070f3;
+    border-color: var(--eng-accent);
+    color: var(--eng-accent);
   }
 
   &:disabled {
@@ -367,13 +435,13 @@ textarea.df-control {
   }
 
   &.is-primary {
-    background: #0070f3;
-    border-color: #0070f3;
-    color: #fff;
+    background: var(--eng-accent);
+    border-color: var(--eng-accent);
+    color: var(--eng-on-accent);
 
     &:hover:not(:disabled) {
-      background: #1d4ed8;
-      color: #fff;
+      background: var(--eng-accent-hover);
+      color: var(--eng-on-accent);
     }
   }
 }
@@ -382,9 +450,9 @@ textarea.df-control {
 .df-empty-cell {
   padding: 22px;
   text-align: center;
-  color: #8f8f8f;
+  color: var(--eng-faint);
   font-size: 12.5px;
-  border: 1px dashed #d4d4d4;
+  border: 1px dashed var(--eng-control-border);
   border-radius: 8px;
 }
 
@@ -405,26 +473,26 @@ textarea.df-control {
     padding: 8px 10px;
     text-align: left;
     font-weight: 500;
-    color: #666666;
-    background: #fafbfc;
-    border-bottom: 1px solid #eaeaea;
+    color: var(--eng-dim);
+    background: var(--eng-thead-bg);
+    border-bottom: 1px solid var(--eng-line);
     white-space: nowrap;
   }
 
   td {
     padding: 6px 8px;
-    border-bottom: 1px solid #f2f4f7;
+    border-bottom: 1px solid var(--eng-line-soft);
     vertical-align: middle;
 
     &.is-invalid {
-      background: #fef3f2;
+      background: var(--eng-danger-soft);
     }
   }
 
   tfoot td {
     padding: 8px 10px;
-    background: #fafbfc;
-    border-top: 1px solid #eaeaea;
+    background: var(--eng-thead-bg);
+    border-top: 1px solid var(--eng-line);
     font-weight: 500;
   }
 
@@ -435,7 +503,7 @@ textarea.df-control {
 }
 
 .df-td-index {
-  color: #8f8f8f;
+  color: var(--eng-faint);
   text-align: center;
 }
 
@@ -446,12 +514,12 @@ textarea.df-control {
 .df-locked {
   display: inline-block;
   padding: 4px 0;
-  color: #8f8f8f;
+  color: var(--eng-faint);
 }
 
 .df-cell-error {
   margin-top: 3px;
-  color: #d92d20;
+  color: var(--eng-danger);
   font-size: 11px;
 }
 
@@ -497,17 +565,17 @@ textarea.df-control {
   gap: 10px;
   margin-top: 18px;
   padding-top: 16px;
-  border-top: 1px solid #eaeaea;
+  border-top: 1px solid var(--eng-line);
 }
 
 .df-status {
   font-size: 12.5px;
 
   &.is-ok {
-    color: #067647;
+    color: var(--eng-ok);
   }
 
   &.is-error {
-    color: #d92d20;
+    color: var(--eng-danger);
   }
 }

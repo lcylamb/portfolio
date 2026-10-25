@@ -138,7 +138,7 @@ export default function About({ lang = 'zh' }: { lang?: 'zh' | 'en' }) {
                   </span>
                 </h3>
                 {item.body && (
-                  <p className="m-0 text-[13.5px] leading-[1.8] text-[#444]">
+                  <p className="m-0 text-[13.5px] leading-[1.8] text-body">
                     {item.body}
                   </p>
                 )}
