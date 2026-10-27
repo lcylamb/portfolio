@@ -21,7 +21,7 @@ const PHOTOS = [
 const COPY = {
   zh: {
     eyebrow: '4 年前端 · 深圳 · 保险 / 中后台',
-    p1: '前四年在保险中后台，写过不少表单。最烦的那张，最近被我抽出来重写，现在它只是一份 JSON。',
+    p1: '四年做前端，其中近三年在保险中后台，写过不少表单。最烦的那张，最近被我抽出来重写，现在它只是一份 JSON。',
     p2: '现在在做 LLM 应用：把模型接进业务后端，用评测而不是感觉判断它靠不靠谱。',
     workTitle: '在做的东西',
     writingTitle: '写过的东西',
@@ -44,7 +44,7 @@ const COPY = {
   },
   en: {
     eyebrow: '4 yrs frontend · Shenzhen · insurance / back-office',
-    p1: 'Four years of insurance back-office work, and a lot of forms. The one I hated most is now just a JSON file.',
+    p1: 'Four years of frontend work, the last three in insurance back-office, and a lot of forms. The one I hated most is now just a JSON file.',
     p2: 'These days I put LLMs into business backends, and judge them with evals rather than gut feel.',
     workTitle: 'Current work',
     writingTitle: 'Writing',
