@@ -22,14 +22,14 @@ export const metadata: Metadata = {
     template: "%s · Pluvia's Trail",
   },
   description:
-    '前端开发。做过四年保险行业的中后台系统，最近把其中最难的一块（动态表单）重新设计成了 schema 驱动的引擎。',
+    '前端开发。四年做前端，其中近三年做保险行业的中后台系统，最近把其中最难的一块（动态表单）重新设计成了 schema 驱动的引擎。',
   openGraph: {
     type: 'website',
     locale: 'zh_CN',
     siteName: "Pluvia's Trail",
     title: "Pluvia's Trail",
     description:
-      '前端开发。做过四年保险行业的中后台系统，最近把其中最难的一块（动态表单）重新设计成了 schema 驱动的引擎。',
+      '前端开发。四年做前端，其中近三年做保险行业的中后台系统，最近把其中最难的一块（动态表单）重新设计成了 schema 驱动的引擎。',
     // 分享卡片没有图就是一个裸链接。先用一张自己的照片顶着，
     // 换成专门做的 1200×630 图会更好，但空着是最差的。
     // og:image 按规范要绝对地址；Pages 上就是 github.io 域 + basePath。

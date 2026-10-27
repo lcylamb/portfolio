@@ -57,7 +57,7 @@ const STACK = {
 const COPY = {
   zh: {
     h1: '关于',
-    bio: '前端开发，现在深圳。过去四年做保险中后台——理算、核赔、调度这类流程长、字段多、错一笔要赔钱的系统。最近把其中最难的动态表单抽出来重做，也把过程写成了文章。',
+    bio: '前端开发，现在深圳。四年做前端，其中近三年在保险中后台——理算、核赔、调度这类流程长、字段多、错一笔要赔钱的系统。最近把其中最难的动态表单抽出来重做，也把过程写成了文章。',
     emailNote: '',
     pronun: 'Pluvia Verna — /ˈplu.wi.a ˈwer.na/（拉丁语的「春雨」）',
     expTitle: '做过什么',
@@ -67,7 +67,7 @@ const COPY = {
   },
   en: {
     h1: 'About',
-    bio: 'Frontend developer in Shenzhen. Most of the past four years went into insurance back-office — calculation, adjudication, dispatch: long workflows, hundreds of fields, and mistakes that cost real money. Recently I rebuilt the hardest of those forms and wrote down how.',
+    bio: 'Frontend developer in Shenzhen. Four years of frontend work, the last three in insurance back-office — calculation, adjudication, dispatch: long workflows, hundreds of fields, and mistakes that cost real money. Recently I rebuilt the hardest of those forms and wrote down how.',
     emailNote: '',
     pronun: 'Pluvia Verna — /ˈplu.wi.a ˈwer.na/ (Latin for "spring rain")',
     expTitle: 'Experience',
