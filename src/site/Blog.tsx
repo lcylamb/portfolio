@@ -3,7 +3,7 @@
 // 它是服务端组件，数据来自 site/posts —— 和首页「写过的东西」同一份，
 // 加文章只改那一个文件。双语：文案按 lang 取，英文版由 /en/blog 复用。
 
-import { POSTS, PostCard } from './posts';
+import { FEATURED_POSTS, REST_POSTS, PostCard } from './posts';
 import type { Locale } from './i18n';
 
 const COPY = {
@@ -21,9 +21,9 @@ const COPY = {
 
 export default function Blog({ lang = 'zh' }: { lang?: Locale }) {
   const t = COPY[lang];
-  // 置顶的是站点原创主线（表单引擎重构两篇），其余按时间倒序。
-  const featured = POSTS.filter((p) => p.featured);
-  const rest = POSTS.filter((p) => !p.featured);
+  // 排序全在 site/posts 里定：置顶系列按篇序（第 1 篇在前），其余按日期倒序。
+  const featured = FEATURED_POSTS;
+  const rest = REST_POSTS;
   return (
     <div className="page-enter mx-auto max-w-[800px] px-6 pt-16 pb-24">
       <p className="m-0 mb-5 font-mono text-[11.5px] tracking-[0.18em] text-faint">

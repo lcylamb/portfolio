@@ -27,7 +27,12 @@ export interface Post {
   featured?: boolean;
 }
 
-export const POSTS: Post[] = [
+// 顺序由这里保证，不靠手写数组的顺序。
+//
+// 之前是按「想到哪篇写哪篇」手填的，结果列表上出现了 09-22、10-12、10-23、08-14
+// 这种忽上忽下的日期，首页「最近几篇」也跟着错。排序放在数据源这一层，
+// 两个页面就不可能各排各的；以后插新文章，位置由 date 决定。
+const POSTS_RAW: Post[] = [
   {
     date: '2026-09-22',
     title: '我把一千三百多行的 if‑else 表单，重写成了一份 JSON',
@@ -94,6 +99,17 @@ export const POSTS: Post[] = [
       'Why postMessage is not real-time, why URL parameters are the only channel back, and how to share login state safely',
   },
 ];
+
+/** 全站列表：一律按日期倒序（最新在前）。字符串日期是 YYYY-MM-DD，直接比较即可。 */
+export const POSTS: Post[] = [...POSTS_RAW].sort((a, b) => b.date.localeCompare(a.date));
+
+/** 置顶的系列：按日期正序，第 1 篇在前 —— 系列是给人从头读的，不是按新旧排。 */
+export const FEATURED_POSTS: Post[] = POSTS.filter((p) => p.featured).sort((a, b) =>
+  a.date.localeCompare(b.date),
+);
+
+/** 非置顶的其余文章：日期倒序。 */
+export const REST_POSTS: Post[] = POSTS.filter((p) => !p.featured);
 
 // 文章条目：编辑部式的清单行，不是卡片。
 // mono 日期靠左、标题和中段摘要在右 —— 两栏基线对齐，
