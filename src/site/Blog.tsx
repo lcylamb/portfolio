@@ -3,27 +3,23 @@
 // 它是服务端组件，数据来自 site/posts —— 和首页「写过的东西」同一份，
 // 加文章只改那一个文件。双语：文案按 lang 取，英文版由 /en/blog 复用。
 
-import { FEATURED_POSTS, REST_POSTS, PostCard } from './posts';
+import { POSTS, PostCard } from './posts';
 import type { Locale } from './i18n';
 
 const COPY = {
   zh: {
     h1: '写过的东西',
     intro: '重构里做过的取舍、啃原理时整理的笔记、以及踩过的坑。',
-    pinned: '置顶 · 动态表单引擎系列',
   },
   en: {
     h1: 'Writing',
     intro: 'Trade-offs from a real rewrite, notes on how JS actually works, and the pits I fell into.',
-    pinned: 'Pinned · Form engine series',
   },
 } as const;
 
 export default function Blog({ lang = 'zh' }: { lang?: Locale }) {
   const t = COPY[lang];
-  // 排序全在 site/posts 里定：置顶系列按篇序（第 1 篇在前），其余按日期倒序。
-  const featured = FEATURED_POSTS;
-  const rest = REST_POSTS;
+  // 排序全在 site/posts 里定：全站一律日期倒序，没有置顶分块。
   return (
     <div className="page-enter mx-auto max-w-[800px] px-6 pt-16 pb-24">
       <p className="m-0 mb-5 font-mono text-[11.5px] tracking-[0.18em] text-faint">
@@ -35,19 +31,8 @@ export default function Blog({ lang = 'zh' }: { lang?: Locale }) {
       <p className="mt-4 mb-9 max-w-[36em] text-[14.5px] leading-[1.85] text-body">
         {t.intro}
       </p>
-      {featured.length > 0 && (
-        <p className="m-0 mb-3 font-mono text-[11.5px] tracking-[0.14em] text-faint">
-          {t.pinned}
-        </p>
-      )}
       <div className="border-t border-line">
-        {featured.map((post) => (
-          <PostCard key={post.href} post={post} lang={lang} />
-        ))}
-        {featured.length > 0 && rest.length > 0 && (
-          <div className="my-4 border-t border-dashed border-line" aria-hidden />
-        )}
-        {rest.map((post) => (
+        {POSTS.map((post) => (
           <PostCard key={post.href} post={post} lang={lang} />
         ))}
       </div>
