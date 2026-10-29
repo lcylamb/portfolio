@@ -23,8 +23,6 @@ export interface Post {
   href: string;
   titleEn?: string;
   noteEn?: string;
-  /** 置顶：表单引擎系列（站点的原创主线） */
-  featured?: boolean;
 }
 
 // 顺序由这里保证，不靠手写数组的顺序。
@@ -37,7 +35,6 @@ const POSTS_RAW: Post[] = [
     date: '2026-09-22',
     title: '我把一千三百多行的 if‑else 表单，重写成了一份 JSON',
     note: '四个具体问题、三个设计决定，以及重构付出的代价和边界',
-    featured: true,
     href: '/article/dynamic-form-schema',
     titleEn: 'I Rewrote an if-else Form of Over 1,300 Lines into JSON',
     noteEn:
@@ -47,7 +44,6 @@ const POSTS_RAW: Post[] = [
     date: '2026-10-12',
     title: '一百行的条件求值器，撑起整张动态表单',
     note: '表单引擎系列第二篇：schema 里的联动条件是怎么被执行的',
-    featured: true,
     href: '/article/form-condition-evaluator',
     titleEn: 'A Hundred-Line Condition Evaluator Powers a Whole Dynamic Form',
     noteEn:
@@ -100,16 +96,8 @@ const POSTS_RAW: Post[] = [
   },
 ];
 
-/** 全站列表：一律按日期倒序（最新在前）。字符串日期是 YYYY-MM-DD，直接比较即可。 */
+/** 全站列表：一律按日期倒序（最新在前），不做置顶分块 —— 日期断了读起来像错乱。 */
 export const POSTS: Post[] = [...POSTS_RAW].sort((a, b) => b.date.localeCompare(a.date));
-
-/** 置顶的系列：按日期正序，第 1 篇在前 —— 系列是给人从头读的，不是按新旧排。 */
-export const FEATURED_POSTS: Post[] = POSTS.filter((p) => p.featured).sort((a, b) =>
-  a.date.localeCompare(b.date),
-);
-
-/** 非置顶的其余文章：日期倒序。 */
-export const REST_POSTS: Post[] = POSTS.filter((p) => !p.featured);
 
 // 文章条目：编辑部式的清单行，不是卡片。
 // mono 日期靠左、标题和中段摘要在右 —— 两栏基线对齐，
